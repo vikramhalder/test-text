@@ -1,0 +1,26 @@
+name: Kivred Runner
+on:
+  push:
+    branches: ["master"]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ 8, 17 ]
+    name: Run unit tests on Java
+    steps:
+      - uses: actions/checkout@master
+      - name: Setup java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+      - run: mvn spring-boot:run
